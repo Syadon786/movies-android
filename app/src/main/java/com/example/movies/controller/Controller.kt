@@ -11,8 +11,9 @@ class Controller(context : Context) {
         this.model = Model(context)
     }
 
-    fun getMovieData(id : Int) : Model.Movie {
-        return this.model.moviesData[id]
+    fun getMovieData(id : Int) : List<Any> {
+        return listOf<Any>(this.model.moviesData[id].id, getMovieTitle(id), getMovieReleasedDate(id), getMovieGenres(id),
+            getMoviePlayTime(id), getMovieDirector(id), getMovieCost(id), getMovieProfit(id), getMovieCast(id), getPosterName(id))
     }
 
     fun getMovieTitle(id : Int) : String {
