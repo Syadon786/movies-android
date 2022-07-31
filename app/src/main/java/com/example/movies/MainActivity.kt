@@ -11,10 +11,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val controller : Controller = Controller(applicationContext)
 
-        val movieTest = controller.getMovieData(0)
         if(BuildConfig.DEBUG) {
+            val movieTest = controller.getMovieData(0)
             val msg : String = "Movie data from view: $movieTest"
             Log.d("ViewData", msg)
         }
+
+
     }
 }

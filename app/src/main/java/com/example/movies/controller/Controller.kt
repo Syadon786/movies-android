@@ -61,4 +61,8 @@ class Controller(context : Context) {
     fun getPosterName(id : Int) : String  {
         return this.model.moviesData[id].poster
     }
+
+    fun getMoviesCount() : Int {
+        return this.model.moviesData.count()
+    }
 }
