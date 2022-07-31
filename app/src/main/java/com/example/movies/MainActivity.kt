@@ -1,15 +1,24 @@
 package com.example.movies
 
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
+import android.widget.TextView
 import com.example.movies.controller.Controller
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //Controller példányosítása amin keresztül lekérünk adatokat a modellből
         val controller : Controller = Controller(applicationContext)
+
+        val posterTest : ImageView = findViewById(R.id.posterTest)
+        val titleTest : TextView = findViewById(R.id.titleTest)
+        val plotTest : TextView = findViewById(R.id.plotTest)
 
         if(BuildConfig.DEBUG) {
             val movieTest = controller.getMovieData(0)
@@ -17,6 +26,14 @@ class MainActivity : AppCompatActivity() {
             Log.d("ViewData", msg)
         }
 
+        //ImageView kép állítása kódból
+        val path = "android.resource://$packageName/drawable/"
+        val uri : Uri = Uri.parse("$path${controller.getPosterName(0)}")
+        posterTest.setImageURI(null);
+        posterTest.setImageURI(uri)
 
+        //Többi példa elem lekérdezése
+        titleTest.text = controller.getMovieTitle(0)
+        plotTest.text = controller.getMoviePlot(0)
     }
 }
