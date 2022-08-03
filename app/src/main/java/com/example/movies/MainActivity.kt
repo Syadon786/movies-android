@@ -24,6 +24,15 @@ class MainActivity : AppCompatActivity() {
             val movieTest = controller.getMovieData(0)
             val msg : String = "Movie data from view: $movieTest"
             Log.d("ViewData", msg)
+
+            var rotsCast = controller.getMovieCast(2)
+            Log.d("Rots cast", rotsCast.toString())
+
+            var cast = mutableListOf<MutableList<Pair<String, String>>>()
+            for (i in 0 until controller.getMoviesCount()) {
+                cast.add(controller.getMovieCast(i))
+            }
+            Log.d("Cast", cast.toString())
         }
 
         //ImageView kép állítása kódból
