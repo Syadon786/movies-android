@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             var cast = mutableListOf<MutableList<Pair<String, String>>>()
             for (i in 0 until controller.getMoviesCount()) {
                 cast.add(controller.getMovieCast(i))
-             }
+            }           
             Log.d("Cast", cast.toString())
         }
 
