@@ -1,6 +1,7 @@
 package com.example.movies.controller
 
 import android.content.Context
+import android.net.Uri
 import com.example.movies.model.Model
 
 class Controller(context : Context) {
@@ -11,57 +12,72 @@ class Controller(context : Context) {
         this.model = Model(context)
     }
 
+    //Egy adott film adatait adja vissza id alapján Movie objektumként
     fun getMovieData(id : Int) : Model.Movie {
-        return Model.Movie(
-                this.model.moviesData[id].id,
-                model.moviesData[id].title,
-                model.moviesData[id].released,
-                model.moviesData[id].plot,
-                model.moviesData[id].genre,
-                model.moviesData[id].playtime,
-                model.moviesData[id].director,
-                model.moviesData[id].cost,
-                model.moviesData[id].profit,
-                model.moviesData[id].cast,
-                model.moviesData[id].poster
-        )
+        return this.model.moviesData[id]
     }
 
+    //Összes film adatait adja vissza listaként melynek minden eleme egy Movie objektum
+    fun getAllMoviesData() : List<Model.Movie> {
+        return this.model.moviesData
+    }
+
+    //Egy adott film címét adja vissza id alapján
     fun getMovieTitle(id : Int) : String {
         return this.model.moviesData[id].title
     }
 
+    //Egy adott film megjelenési dátumát adja vissza id alapján
     fun getMovieReleasedDate(id : Int) : String {
         return this.model.moviesData[id].released
     }
 
+    //Egy adott film leírását adja vissza id alapján
     fun getMoviePlot(id : Int) : String {
         return this.model.moviesData[id].plot
     }
 
+    //Egy adott film műfajait adja vissza id alapján listaként amiben stringekként
+    // szerepelnek az individuális műfajok
     fun getMovieGenres(id : Int) : List<String> {
-        return this.model.moviesData[id].genre.replace(" ", "").split(",")
+        return movieGenresToList(this.model.moviesData[id].genre)
     }
 
+    //Átkonvertálja a string műfaj adatokat listává
+    fun movieGenresToList(genres : String) : List<String> {
+        return genres.replace(" ", "").split(",")
+    }
+
+    //Egy adott film hosszát adja vissza id alapján
     fun getMoviePlayTime(id : Int) : String {
         return this.model.moviesData[id].playtime
     }
 
+    //Egy adott film rendezőjének nevét adja vissza id alapján
     fun getMovieDirector(id : Int) : String {
         return this.model.moviesData[id].director
     }
 
+    //Egy adott film elkészítési költségét adja vissza id alapján
     fun getMovieCost(id : Int) : String {
         return this.model.moviesData[id].cost
     }
 
+    //Egy adott film bevételi értékét adja vissza id alapján
     fun getMovieProfit(id : Int) : String {
         return this.model.moviesData[id].profit
     }
 
+    //Egy adott filmhez tartozó színészek neveit adja vissza MutableList-ben, ahol a színészek nevei
+    // és az általuk játszott karakter egy Pair<String, String> objektumban van realizálva
     fun getMovieCast(id : Int) : MutableList<Pair<String, String>> {
+        return movieCastToMutableList(this.model.moviesData[id].cast)
+    }
+
+    //Feldolgozza a cast stringet egy MutableList<Pair<String, String>> adatszerkezetbe
+    fun movieCastToMutableList(cast : String) : MutableList<Pair<String, String>> {
         var castInfo : MutableList<Pair<String, String>> = mutableListOf()
-        val actors = this.model.moviesData[id].cast.split(',')
+        val actors = cast.split(',')
         for(actor in actors) {
             val temp = actor.split("#")
             castInfo.add(Pair(temp[0], temp[1]))
@@ -69,10 +85,19 @@ class Controller(context : Context) {
         return castInfo
     }
 
+    //Egy adott film poszterének nevét adja vissza id alapján
     fun getPosterName(id : Int) : String  {
         return this.model.moviesData[id].poster
     }
 
+    //Visszaadja egy film poszterének Uri címét id alapján, amit utána
+    // pl egy ImageView-nak be lehet állítani .setImageUri() metódussal
+    fun getPosterUri(id : Int, packageName : String) : Uri {
+        val path = "android.resource://$packageName/drawable/"
+        return Uri.parse("$path${getPosterName(id)}")
+    }
+
+    //Az elérhető filmek számát adja vissza
     fun getMoviesCount() : Int {
         return this.model.moviesData.count()
     }
