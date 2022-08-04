@@ -37,6 +37,16 @@ class MainActivity : AppCompatActivity() {
 
             var movieData = controller.getMovieData(0)
             Log.d("movie0", movieData.toString())
+
+
+            var moviesData = mutableListOf<Model.Movie>()
+            for(i in 0 until controller.getMoviesCount()) {
+                moviesData.add(controller.getMovieData(i))
+            }
+            Log.d("allMovies", moviesData.toString())
+
+            //Egy db property lekérdezése
+            // moviesData[0].poster
         }
 
         //ImageView kép állítása kódból
