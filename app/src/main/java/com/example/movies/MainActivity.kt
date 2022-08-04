@@ -6,58 +6,28 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movies.controller.Controller
 import com.example.movies.model.Model
+import com.example.movies.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         //Controller példányosítása amin keresztül lekérünk adatokat a modellből
-        val controller : Controller = Controller(applicationContext)
+        val controller: Controller = Controller(applicationContext)
 
-        val posterTest : ImageView = findViewById(R.id.posterTest)
-        val titleTest : TextView = findViewById(R.id.titleTest)
-        val plotTest : TextView = findViewById(R.id.plotTest)
-
-        if(BuildConfig.DEBUG) {
-            val movieTest = controller.getMovieData(0)
-            val msg : String = "Movie data from view: $movieTest"
-            Log.d("ViewData", msg)
-
-            var rotsCast = controller.getMovieCast(2)
-            Log.d("Rots cast", rotsCast.toString())
-
-            var cast = mutableListOf<MutableList<Pair<String, String>>>()
-            for (i in 0 until controller.getMoviesCount()) {
-                cast.add(controller.getMovieCast(i))
-            }           
-            Log.d("Cast", cast.toString())
-
-            var movieData = controller.getMovieData(0)
-            Log.d("movie0", movieData.toString())
-
-
-            var moviesData = mutableListOf<Model.Movie>()
-            for(i in 0 until controller.getMoviesCount()) {
-                moviesData.add(controller.getMovieData(i))
-            }
-            Log.d("allMovies", moviesData.toString())
-
-            //Egy db property lekérdezése
-            // moviesData[0].poster
+        val listOfImages = mutableListOf<Uri>()
+        for (i in 0 until controller.getMoviesCount()) {
+            listOfImages.add(controller.getPosterUri(i, packageName))
         }
-
-        //ImageView kép állítása kódból
-        val path = "android.resource://$packageName/drawable/"
-        val uri : Uri = Uri.parse("$path${controller.getPosterName(0)}")
-        posterTest.setImageURI(null);
-        posterTest.setImageURI(uri)
-
-        //Többi példa elem lekérdezése
-        titleTest.text = controller.getMovieTitle(0)
-        plotTest.text = controller.getMoviePlot(0)
+        val adapter = MovieAdapter(controller.getAllMoviesData(), listOfImages)
+        binding.listOfMovies.adapter = adapter
+        binding.listOfMovies.layoutManager = LinearLayoutManager(this)
 
     }
 }
