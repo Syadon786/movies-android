@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             var cast = mutableListOf<MutableList<Pair<String, String>>>()
             for (i in 0 until controller.getMoviesCount()) {
                 cast.add(controller.getMovieCast(i))
-            }
+            }           
             Log.d("Cast", cast.toString())
             var movieData = controller.getMovieData(0)
             Log.d("movie0", movieData.toString())
@@ -46,5 +46,6 @@ class MainActivity : AppCompatActivity() {
         //Többi példa elem lekérdezése
         titleTest.text = controller.getMovieTitle(0)
         plotTest.text = controller.getMoviePlot(0)
+
     }
 }
