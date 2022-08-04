@@ -33,6 +33,8 @@ class MainActivity : AppCompatActivity() {
                 cast.add(controller.getMovieCast(i))
             }
             Log.d("Cast", cast.toString())
+            var movieData = controller.getMovieData(0)
+            Log.d("movie0", movieData.toString())
         }
 
         //ImageView kép állítása kódból
