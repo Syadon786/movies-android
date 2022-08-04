@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.movies.controller.Controller
+import com.example.movies.model.Model
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity() {
                 cast.add(controller.getMovieCast(i))
             }           
             Log.d("Cast", cast.toString())
+
             var movieData = controller.getMovieData(0)
             Log.d("movie0", movieData.toString())
         }
