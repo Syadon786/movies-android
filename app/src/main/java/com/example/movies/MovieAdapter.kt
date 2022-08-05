@@ -11,10 +11,22 @@ class MovieAdapter(
     val movies: List<Model.Movie>,
     val images: List<Uri>
 ) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
+
+    //új kódok a card klikkelésre
+    private lateinit var mListener: onItemClickListener
+
+    interface onItemClickListener {
+        fun onItemClick(position: Int)
+    }
+
+    fun setOnItemClickListener(listener: onItemClickListener) {
+        mListener = listener
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ItemCardBinding.inflate(layoutInflater, parent, false)
-        return MovieViewHolder(binding)
+        return MovieViewHolder(binding, mListener)
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
@@ -30,6 +42,13 @@ class MovieAdapter(
         return movies.size
     }
 
-    inner class MovieViewHolder(val binding: ItemCardBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    inner class MovieViewHolder(val binding: ItemCardBinding, listener: onItemClickListener) :
+        RecyclerView.ViewHolder(binding.root) {
+
+            init {
+                itemView.setOnClickListener {
+                    listener.onItemClick(bindingAdapterPosition)
+                }
+            }
+        }
 }
