@@ -2,14 +2,20 @@ package com.example.movies.controller
 
 import android.content.Context
 import android.net.Uri
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.movies.MovieAdapter
+import com.example.movies.databinding.ActivityMainBinding
 import com.example.movies.model.Model
 
-class Controller(context : Context) {
+class Controller(context : Context, packageName : String) {
     private val model : Model
     private val context : Context
+    private val packageName : String
     init {
         this.context = context
         this.model = Model(context)
+        this.packageName = packageName
     }
 
     //Egy adott film adatait adja vissza id alapján Movie objektumként
@@ -92,13 +98,32 @@ class Controller(context : Context) {
 
     //Visszaadja egy film poszterének Uri címét id alapján, amit utána
     // pl egy ImageView-nak be lehet állítani .setImageUri() metódussal
-    fun getPosterUri(id : Int, packageName : String) : Uri {
-        val path = "android.resource://$packageName/drawable/"
+    fun getPosterUri(id : Int) : Uri {
+        val path = "android.resource://${this.packageName}/drawable/"
         return Uri.parse("$path${getPosterName(id)}")
+    }
+
+    //Visszaadja minden filmhez tartozó posztert
+    fun getAllPosterUri() : List<Uri> {
+        val listOfImages = mutableListOf<Uri>()
+        for (i in 0 until getMoviesCount()) {
+            listOfImages.add(getPosterUri(i))
+        }
+        return listOfImages
     }
 
     //Az elérhető filmek számát adja vissza
     fun getMoviesCount() : Int {
         return this.model.moviesData.count()
+    }
+
+    //Visszaadja a szűrt filmlistát
+    fun getFilteredMoviesData(filter : String): List<Model.Movie> {
+        return this.model.getFilteredMovies(filter.lowercase())
+    }
+
+    //Leképezi a kiszűrt filmlista alapján a poster urikat egy listába
+    fun getFilteredPosterUris(filteredMovies : List<Model.Movie>) : List<Uri> {
+        return filteredMovies.map { this.getPosterUri(it.id) }
     }
 }

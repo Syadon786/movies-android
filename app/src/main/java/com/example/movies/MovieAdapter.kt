@@ -13,7 +13,7 @@ class MovieAdapter(
 ) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     //új kódok a card klikkelésre
-    private lateinit var mListener: onItemClickListener
+    private var mListener: onItemClickListener? = null
 
     interface onItemClickListener {
         fun onItemClick(position: Int)
@@ -42,12 +42,12 @@ class MovieAdapter(
         return movies.size
     }
 
-    inner class MovieViewHolder(val binding: ItemCardBinding, listener: onItemClickListener) :
+    inner class MovieViewHolder(val binding: ItemCardBinding, listener: onItemClickListener?) :
         RecyclerView.ViewHolder(binding.root) {
 
             init {
                 itemView.setOnClickListener {
-                    listener.onItemClick(bindingAdapterPosition)
+                    listener?.onItemClick(bindingAdapterPosition)
                 }
             }
         }

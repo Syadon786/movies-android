@@ -2,7 +2,11 @@ package com.example.movies.model
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movies.BuildConfig
+import com.example.movies.MovieAdapter
+import com.example.movies.databinding.ActivityMainBinding
 
 class Model(context : Context) {
     private val resFileName : String = "movies.csv"
@@ -46,6 +50,14 @@ class Model(context : Context) {
         return lines
     }
 
+    //Kezdetleges filmlista szűréshez
+    fun getFilteredMovies(filter : String) : List<Movie> {
+        val filteredData = this.moviesData.filter {
+            it.title.lowercase().contains(filter) || it.director.lowercase().contains(filter)
+                    || it.genre.lowercase().contains(filter)
+        }
+       return filteredData.ifEmpty { listOf() }
+    }
 }
 
 
