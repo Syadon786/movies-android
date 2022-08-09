@@ -43,6 +43,12 @@ class MainActivity : AppCompatActivity() {
                 TODO("not implemented")
             }
         })
+
+        //Ha kikattintunk a SearchView-ből akkor bezáródik a keyboard
+        binding.searchBar.setOnQueryTextFocusChangeListener  { _, hasFocus ->
+            if(!hasFocus)
+                hideKeyboard(binding.searchBar)
+        }
     }
 
 
