@@ -8,4 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#F0F0F0</color>
+    <color name="status_bar">#000000</color>
+    <color name="app_bar">#212121</color>
+    <color name="background">#303030</color>
+    <color name="cards">#424242</color>
+    <color name="primary_text">#FFFFFF</color> <!--100% opacity-->
+    <color name="secondary_text">#B3FFFFFF</color> <!--70% opacity-->
+    <color name="hint_text">#80FFFFFF</color> <!--50% opacity-->
+    <color name="transparent">#00000000</color>
 </resources>
