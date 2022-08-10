@@ -61,8 +61,10 @@ class MainActivity : AppCompatActivity() {
         binding.listOfMovies.adapter = adapter
         binding.listOfMovies.layoutManager = LinearLayoutManager(applicationContext)
         adapter.setOnItemClickListener(object : MovieAdapter.onItemClickListener{
-            override fun onItemClick(position: Int) {
-                val title = controller.getMovieTitle(position)
+            override fun onItemClick(view : View, position: Int) {
+                //Id kiszedése a tag-ből
+                val id = view.tag.toString().split('_')[1].toInt()
+                val title = controller.getMovieTitle(id)
                 Toast.makeText(applicationContext, "A következő filmet választottad ki: $title", Toast.LENGTH_SHORT).show()
             }
         })

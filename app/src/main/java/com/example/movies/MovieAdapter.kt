@@ -2,6 +2,7 @@ package com.example.movies
 
 import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movies.databinding.ItemCardBinding
@@ -13,10 +14,12 @@ class MovieAdapter(
 ) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     //új kódok a card klikkelésre
-    private var mListener: onItemClickListener? = null
+    private lateinit var mListener: onItemClickListener
 
+    //view paraméterrel kiegészítés, hogy kinyerhessük a taget ne csak a pozíciót, ami csak akkor
+    //működik amikor az összes film ki van listázva
     interface onItemClickListener {
-        fun onItemClick(position: Int)
+        fun onItemClick(view : View, position: Int)
     }
 
     fun setOnItemClickListener(listener: onItemClickListener) {
@@ -31,6 +34,8 @@ class MovieAdapter(
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         holder.binding.apply {
+            //tag beállítása a film id-ével
+            this.root.tag = "card_${movies[position].id}"
             ivPoster.setImageURI(images[position])
             tvMovieTitle.text = movies[position].title
             tvReleased.text = movies[position].released
@@ -44,10 +49,9 @@ class MovieAdapter(
 
     inner class MovieViewHolder(val binding: ItemCardBinding, listener: onItemClickListener?) :
         RecyclerView.ViewHolder(binding.root) {
-
             init {
                 itemView.setOnClickListener {
-                    listener?.onItemClick(bindingAdapterPosition)
+                    listener?.onItemClick(it, bindingAdapterPosition)
                 }
             }
         }
