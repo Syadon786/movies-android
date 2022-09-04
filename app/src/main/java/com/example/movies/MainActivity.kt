@@ -22,9 +22,9 @@ class MainActivity : AppCompatActivity() {
         //Controller példányosítása amin keresztül lekérünk adatokat a modellből
         val controller: Controller = Controller(applicationContext, packageName)
         //RecyclerView feltöltése listaelemekkel
-        renderRecyclerViewItems(controller, binding)
+       // renderRecyclerViewItems(controller, binding)
 
-        binding.searchBar.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+      /*  binding.searchBar.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             //A kereséskor az enter lenyomása után hívodik meg
             override fun onQueryTextSubmit(filter: String?): Boolean {
                 if(BuildConfig.DEBUG) {
@@ -48,11 +48,11 @@ class MainActivity : AppCompatActivity() {
         binding.searchBar.setOnQueryTextFocusChangeListener  { _, hasFocus ->
             if(!hasFocus)
                 hideKeyboard(binding.searchBar)
-        }
+        }*/
     }
 
 
-    //Megjeleníti a szűrt vagy összes elérhető filmet a RecyclerView-ben
+    /*//Megjeleníti a szűrt vagy összes elérhető filmet a RecyclerView-ben
     private  fun renderRecyclerViewItems(controller: Controller, binding : ActivityMainBinding, applyFilter : Boolean = false, filter : String = "") {
         val movieData = if (applyFilter && filter != "") controller.getFilteredMoviesData(filter) else controller.getAllMoviesData()
         val posterUris : List<Uri> = if (applyFilter && filter != "") controller.getFilteredPosterUris(movieData) else controller.getAllPosterUri()
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
-
+*/
 
     //A keyboard eltűntetése sikeres szűrés után
     private fun hideKeyboard(view: View) {

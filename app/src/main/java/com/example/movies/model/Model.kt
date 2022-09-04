@@ -2,36 +2,78 @@ package com.example.movies.model
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.movies.BuildConfig
-import com.example.movies.MovieAdapter
-import com.example.movies.databinding.ActivityMainBinding
+import com.android.volley.Request
+import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.Volley
+import com.example.movies.api.RequestQueueSingleton
+import org.json.JSONArray
 
 class Model(context : Context) {
-    private val resFileName : String = "movies.csv"
     private val context : Context
     val moviesData : MutableList<Movie>
 
-    //Nested data class, ami egy movie adatait reprezentálja
+    data class Actor(val actorName : String, val characterName: String)
 
-    data class Movie(val id : Int, val title : String, val released : String, val plot : String, val genre : String,
-                     val playtime : String, val director : String, val cost : String, val profit : String, val cast : String, val poster : String) {
+    data class Movie(val id : String, val title : String, val released : String, val plot : String, val genre : List<String>,
+                     val playtime : String, val director : String, val cost : String, val profit : String, val cast : List<Actor>, val poster : String) {
     }
 
-    //Context attribútum inicializálása a konstruktorban paraméterként kapott application contexttel
-    //moviesData feltöltése a filmek adataival, minden egyes film adatai egy Movie osztály valósít meg
     init {
         this.context = context
-        this.moviesData = readCsv()
-
-        if(BuildConfig.DEBUG) {
-           val msg : String = "Movie data after readCsv: $moviesData"
-            Log.d("moviesData", msg)
-        }
+        this.moviesData = mutableListOf<Movie>()
+        fetchAllMovie()
     }
 
-    //Asset könyvtárból csv fájl kiolvasása sorról sorra
+
+    private fun fetchAllMovie() {
+        val queue = Volley.newRequestQueue(this.context)
+        val url = "https://syadon-android-movies.glitch.me/movie/all"
+
+        val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, url, null,
+            {  response ->
+                val temp : JSONArray = response
+                for(i in 0 until temp.length()) {
+                    val movieJSON = temp.getJSONObject(i)
+                    val tempCast = movieJSON.getJSONArray("cast")
+                    val cast = mutableListOf<Actor>()
+                    for(j in 0 until tempCast.length()) {
+                        val actorJSON = tempCast.getJSONObject(j)
+                        cast.add(Actor(actorName=actorJSON.get("actorName").toString(),
+                            characterName=actorJSON.get("characterName").toString()))
+                    }
+                    val tempGenre = movieJSON.getJSONArray("genre")
+                    val genre = mutableListOf<String>()
+                    for(k in 0 until tempGenre.length()) {
+                        genre.add(tempGenre.getString(k))
+                    }
+
+                    moviesData.add(Movie(id=movieJSON.get("_id").toString(),
+                    title=movieJSON.get("title").toString(),
+                    released=movieJSON.get("released_year").toString(),
+                    plot=movieJSON.get("plot").toString(),
+                    genre=genre,
+                    playtime=movieJSON.get("playtime").toString(),
+                    director=movieJSON.get("director").toString(),
+                    cost=movieJSON.get("cost").toString(),
+                    profit=movieJSON.get("profit").toString(),
+                    cast=cast,
+                    poster=movieJSON.get("poster").toString()
+                    ))
+                }
+                Log.d("pop", moviesData.toString())
+            },
+            {
+                //TODO: Handle error
+            }
+        )
+        RequestQueueSingleton.getInstance(this.context).addToRequestQueue(jsonArrayRequest)
+    }
+
+
+
+
+
+/*    //Asset könyvtárból csv fájl kiolvasása sorról sorra
     private fun readCsv() : MutableList<Movie>  {
         val reader =  this.context.assets.open(resFileName).bufferedReader()
         var lines : MutableList<Movie> = mutableListOf<Movie>()
@@ -48,16 +90,16 @@ class Model(context : Context) {
             lines.add(Movie(index, row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]))
         }
         return lines
-    }
+    }*/
 
-    //Kezdetleges filmlista szűréshez
+/*    //Kezdetleges filmlista szűréshez
     fun getFilteredMovies(filter : String) : List<Movie> {
         val filteredData = this.moviesData.filter {
             it.title.lowercase().contains(filter) || it.director.lowercase().contains(filter)
                     || it.genre.lowercase().contains(filter)
         }
        return filteredData.ifEmpty { listOf() }
-    }
+    }*/
 }
 
 

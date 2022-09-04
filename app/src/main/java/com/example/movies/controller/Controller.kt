@@ -42,7 +42,7 @@ class Controller(context : Context, packageName : String) {
     fun getMoviePlot(id : Int) : String {
         return this.model.moviesData[id].plot
     }
-
+/*
     //Egy adott film műfajait adja vissza id alapján listaként amiben stringekként
     // szerepelnek az individuális műfajok
     fun getMovieGenres(id : Int) : List<String> {
@@ -125,5 +125,5 @@ class Controller(context : Context, packageName : String) {
     //Leképezi a kiszűrt filmlista alapján a poster urikat egy listába
     fun getFilteredPosterUris(filteredMovies : List<Model.Movie>) : List<Uri> {
         return filteredMovies.map { this.getPosterUri(it.id) }
-    }
+    }*/
 }
