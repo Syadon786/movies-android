@@ -92,15 +92,6 @@ class Model(context : Context) {
         }
         return lines
     }*/
-
-/*    //Kezdetleges filmlista szűréshez
-    fun getFilteredMovies(filter : String) : List<Movie> {
-        val filteredData = this.moviesData.filter {
-            it.title.lowercase().contains(filter) || it.director.lowercase().contains(filter)
-                    || it.genre.lowercase().contains(filter)
-        }
-       return filteredData.ifEmpty { listOf() }
-    }*/
 }
 
 

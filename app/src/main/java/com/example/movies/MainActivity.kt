@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
                 if(BuildConfig.DEBUG) {
                     Log.d("filter", filter.toString())
                 }
-                renderRecyclerViewItems(controller, binding, true, filter ?: "")
+                //renderRecyclerViewItems(controller, binding, true, filter ?: "")
                 hideKeyboard(binding.searchBar)
                 return true
             }
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             override fun onQueryTextChange(filter: String?): Boolean {
                 //Ha töröljük a szűrés query-t akkor betölti az összes filmet a listába
                 if(filter!!.isEmpty())
-                    renderRecyclerViewItems(controller, binding)
+                //    renderRecyclerViewItems(controller, binding)
                 return true
                 TODO("not implemented")
             }
@@ -55,22 +55,19 @@ class MainActivity : AppCompatActivity() {
 
 
     //Megjeleníti a szűrt vagy összes elérhető filmet a RecyclerView-ben
-    private  fun renderRecyclerViewItems(controller: Controller, binding : ActivityMainBinding, applyFilter : Boolean = false, filter : String = "") {
+    private  fun renderRecyclerViewItems(controller: Controller, binding : ActivityMainBinding) {
         controller.getAllMoviesData() { moviesData ->
-            Log.d("render", moviesData.toString())
             val adapter = moviesData?.let { MovieAdapter(it) }
             binding.listOfMovies.adapter = adapter
             binding.listOfMovies.layoutManager = LinearLayoutManager(applicationContext)
+            adapter?.setOnItemClickListener(object : MovieAdapter.onItemClickListener{
+                override fun onItemClick(view : View, position: Int) {
+                    Toast.makeText(applicationContext, "A kiválaszott film azonosító: ${view.tag}", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
 
-       /* adapter.setOnItemClickListener(object : MovieAdapter.onItemClickListener{
-            override fun onItemClick(view : View, position: Int) {
-                //Id kiszedése a tag-ből
-                val id = view.tag.toString().split('_')[1].toInt()
-                val title = controller.getMovieTitle(id)
-                Toast.makeText(applicationContext, "A következő filmet választottad ki: $title", Toast.LENGTH_SHORT).show()
-            }
-        })*/
+
     }
 
 
