@@ -1,11 +1,8 @@
 package com.example.movies.controller
 
 import android.content.Context
-import android.net.Uri
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.movies.MovieAdapter
-import com.example.movies.databinding.ActivityMainBinding
+import com.example.movies.api.VolleyCallBack
 import com.example.movies.model.Model
 
 class Controller(context : Context, packageName : String) {
@@ -24,9 +21,20 @@ class Controller(context : Context, packageName : String) {
     }
 
     //Összes film adatait adja vissza listaként melynek minden eleme egy Movie objektum
-    fun getAllMoviesData() : List<Model.Movie> {
-        return this.model.moviesData
+    fun getAllMoviesData(callback: (result: List<Model.Movie>?) -> Unit)  {
+        model.fetchAllMovie(
+                object : VolleyCallBack {
+                    override fun onSuccess(result: Any) {
+                        callback(result as List<Model.Movie>)
+                    }
+
+                    override fun onError(error: String)  {
+                        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                    }
+                },
+            )
     }
+
 
     //Egy adott film címét adja vissza id alapján
     fun getMovieTitle(id : Int) : String {

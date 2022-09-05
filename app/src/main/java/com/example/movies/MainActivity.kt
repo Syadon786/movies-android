@@ -9,8 +9,10 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewbinding.BuildConfig
 import com.example.movies.controller.Controller
 import com.example.movies.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,9 +24,9 @@ class MainActivity : AppCompatActivity() {
         //Controller példányosítása amin keresztül lekérünk adatokat a modellből
         val controller: Controller = Controller(applicationContext, packageName)
         //RecyclerView feltöltése listaelemekkel
-       // renderRecyclerViewItems(controller, binding)
+        renderRecyclerViewItems(controller, binding)
 
-      /*  binding.searchBar.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        binding.searchBar.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             //A kereséskor az enter lenyomása után hívodik meg
             override fun onQueryTextSubmit(filter: String?): Boolean {
                 if(BuildConfig.DEBUG) {
@@ -48,28 +50,29 @@ class MainActivity : AppCompatActivity() {
         binding.searchBar.setOnQueryTextFocusChangeListener  { _, hasFocus ->
             if(!hasFocus)
                 hideKeyboard(binding.searchBar)
-        }*/
+        }
     }
 
 
-    /*//Megjeleníti a szűrt vagy összes elérhető filmet a RecyclerView-ben
+    //Megjeleníti a szűrt vagy összes elérhető filmet a RecyclerView-ben
     private  fun renderRecyclerViewItems(controller: Controller, binding : ActivityMainBinding, applyFilter : Boolean = false, filter : String = "") {
-        val movieData = if (applyFilter && filter != "") controller.getFilteredMoviesData(filter) else controller.getAllMoviesData()
-        val posterUris : List<Uri> = if (applyFilter && filter != "") controller.getFilteredPosterUris(movieData) else controller.getAllPosterUri()
+        controller.getAllMoviesData() { moviesData ->
+            Log.d("render", moviesData.toString())
+            val adapter = moviesData?.let { MovieAdapter(it) }
+            binding.listOfMovies.adapter = adapter
+            binding.listOfMovies.layoutManager = LinearLayoutManager(applicationContext)
+        }
 
-        val adapter = MovieAdapter(movieData, posterUris)
-        binding.listOfMovies.adapter = adapter
-        binding.listOfMovies.layoutManager = LinearLayoutManager(applicationContext)
-        adapter.setOnItemClickListener(object : MovieAdapter.onItemClickListener{
+       /* adapter.setOnItemClickListener(object : MovieAdapter.onItemClickListener{
             override fun onItemClick(view : View, position: Int) {
                 //Id kiszedése a tag-ből
                 val id = view.tag.toString().split('_')[1].toInt()
                 val title = controller.getMovieTitle(id)
                 Toast.makeText(applicationContext, "A következő filmet választottad ki: $title", Toast.LENGTH_SHORT).show()
             }
-        })
+        })*/
     }
-*/
+
 
     //A keyboard eltűntetése sikeres szűrés után
     private fun hideKeyboard(view: View) {

@@ -42,3 +42,8 @@ class RequestQueueSingleton constructor(context: Context) {
 
 
 }
+
+interface VolleyCallBack {
+    fun onSuccess(result : Any)
+    fun onError(error : String)
+}

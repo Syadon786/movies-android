@@ -6,6 +6,7 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
 import com.example.movies.api.RequestQueueSingleton
+import com.example.movies.api.VolleyCallBack
 import org.json.JSONArray
 
 class Model(context : Context) {
@@ -21,14 +22,13 @@ class Model(context : Context) {
     init {
         this.context = context
         this.moviesData = mutableListOf<Movie>()
-        fetchAllMovie()
     }
 
 
-    private fun fetchAllMovie() {
+ fun fetchAllMovie(callback: VolleyCallBack)  {
         val queue = Volley.newRequestQueue(this.context)
         val url = "https://syadon-android-movies.glitch.me/movie/all"
-
+        val movies = mutableListOf<Movie>()
         val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, url, null,
             {  response ->
                 val temp : JSONArray = response
@@ -47,7 +47,7 @@ class Model(context : Context) {
                         genre.add(tempGenre.getString(k))
                     }
 
-                    moviesData.add(Movie(id=movieJSON.get("_id").toString(),
+                    movies.add(Movie(id=movieJSON.get("_id").toString(),
                     title=movieJSON.get("title").toString(),
                     released=movieJSON.get("released_year").toString(),
                     plot=movieJSON.get("plot").toString(),
@@ -59,11 +59,12 @@ class Model(context : Context) {
                     cast=cast,
                     poster=movieJSON.get("poster").toString()
                     ))
+                    callback.onSuccess(movies)
                 }
-                Log.d("pop", moviesData.toString())
+
             },
             {
-                //TODO: Handle error
+                callback.onError("Could not fetch movies JSON")
             }
         )
         RequestQueueSingleton.getInstance(this.context).addToRequestQueue(jsonArrayRequest)
