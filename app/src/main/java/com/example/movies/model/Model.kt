@@ -4,10 +4,12 @@ import android.content.Context
 import android.util.Log
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.movies.api.RequestQueueSingleton
 import com.example.movies.api.VolleyCallBack
 import org.json.JSONArray
+import org.json.JSONObject
 
 class Model(context : Context) {
     private val context : Context
@@ -64,13 +66,50 @@ class Model(context : Context) {
 
             },
             {
-                callback.onError("Could not fetch movies JSON")
+                callback.onError("Could not fetch movies data")
             }
         )
         RequestQueueSingleton.getInstance(this.context).addToRequestQueue(jsonArrayRequest)
     }
 
+fun fetchMovieById(id : String, callback: VolleyCallBack) {
+    val queue = Volley.newRequestQueue(this.context)
+    val url = "https://syadon-android-movies.glitch.me/movie/$id"
+    val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
+        {  movieJSON ->
+            val tempCast = movieJSON.getJSONArray("cast")
+            val cast = mutableListOf<Actor>()
+            for(j in 0 until tempCast.length()) {
+                val actorJSON = tempCast.getJSONObject(j)
+                cast.add(Actor(actorName=actorJSON.get("actorName").toString(),
+                    characterName=actorJSON.get("characterName").toString()))
+            }
 
+            val tempGenre = movieJSON.getJSONArray("genre")
+            val genre = mutableListOf<String>()
+            for(k in 0 until tempGenre.length()) {
+                genre.add(tempGenre.getString(k))
+            }
+            val movie = Movie(id=movieJSON.get("_id").toString(),
+                title=movieJSON.get("title").toString(),
+                released=movieJSON.get("released_year").toString(),
+                plot=movieJSON.get("plot").toString(),
+                genre=genre,
+                playtime=movieJSON.get("playtime").toString(),
+                director=movieJSON.get("director").toString(),
+                cost=movieJSON.get("cost").toString(),
+                profit=movieJSON.get("profit").toString(),
+                cast=cast,
+                poster=movieJSON.get("poster").toString()
+            )
+                callback.onSuccess(movie)
+        },
+        {
+            callback.onError("Could not fetch movie data")
+        }
+    )
+    RequestQueueSingleton.getInstance(this.context).addToRequestQueue(jsonObjectRequest)
+}
 
 
 
