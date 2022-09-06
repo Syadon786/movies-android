@@ -7,14 +7,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movies.databinding.ItemCardBinding
 import com.example.movies.model.Model
+import com.squareup.picasso.Picasso
 
 class MovieAdapter(
     val movies: List<Model.Movie>,
-    val images: List<Uri>
 ) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     //új kódok a card klikkelésre
-    private lateinit var mListener: onItemClickListener
+    private var mListener: onItemClickListener? = null
 
     //view paraméterrel kiegészítés, hogy kinyerhessük a taget ne csak a pozíciót, ami csak akkor
     //működik amikor az összes film ki van listázva
@@ -26,7 +26,7 @@ class MovieAdapter(
         mListener = listener
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
+   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ItemCardBinding.inflate(layoutInflater, parent, false)
         return MovieViewHolder(binding, mListener)
@@ -35,8 +35,8 @@ class MovieAdapter(
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         holder.binding.apply {
             //tag beállítása a film id-ével
-            this.root.tag = "card_${movies[position].id}"
-            ivPoster.setImageURI(images[position])
+            this.root.tag = movies[position].id
+            Picasso.get().load(movies[position].poster).into(ivPoster)
             tvMovieTitle.text = movies[position].title
             tvReleased.text = movies[position].released
             tvPlot.text = movies[position].plot
