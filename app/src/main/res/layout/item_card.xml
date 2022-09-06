@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
+    >
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="10dp"
+        app:cardCornerRadius="20dp"
+        app:cardBackgroundColor="@color/transparent"
+        android:divider="@android:color/transparent"
+        android:elevation="8dp"
+        app:cardElevation="10dp"
+        >
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:background="@color/cards"
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:id="@+id/iv_poster"
+                android:layout_width="115dp"
+                android:layout_height="150dp"
+                android:src="@drawable/baljosarnyak" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+                
+                <TextView
+                    android:id="@+id/tv_movieTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Title of the movie"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/primary_text"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tv_released"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Release date of the movie"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/hint_text"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tv_plot"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Movie's plot"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/secondary_text"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

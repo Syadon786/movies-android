@@ -1,68 +1,50 @@
 package com.example.movies.controller
 
 import android.content.Context
+import android.util.Log
+import android.widget.Toast
+import com.example.movies.api.VolleyCallBack
 import com.example.movies.model.Model
 
-class Controller(context : Context) {
+class Controller(context : Context, packageName : String) {
     private val model : Model
     private val context : Context
+    private val packageName : String
     init {
         this.context = context
         this.model = Model(context)
+        this.packageName = packageName
     }
 
-    fun getMovieData(id : Int) : List<Any> {
-        return listOf<Any>(this.model.moviesData[id].id, getMovieTitle(id), getMovieReleasedDate(id), getMovieGenres(id),
-            getMoviePlayTime(id), getMovieDirector(id), getMovieCost(id), getMovieProfit(id), getMovieCast(id), getPosterName(id))
+    //Összes film adatait adja vissza listaként melynek minden eleme egy Movie objektum
+    fun getAllMoviesData(callback: (result: List<Model.Movie>?) -> Unit)  {
+        model.fetchMovieForList(
+                object : VolleyCallBack {
+                    override fun onSuccess(result: Any) {
+                        callback(result as List<Model.Movie>)
+                    }
+
+                    override fun onError(error: String)  {
+                        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                        callback(null)
+                    }
+                },
+            )
     }
 
-    fun getMovieTitle(id : Int) : String {
-        return this.model.moviesData[id].title
-    }
+    fun getMovieDataById(id : String, callback: (result: Model.Movie?) -> Unit) {
+        model.fetchMovieById(id,
+            object : VolleyCallBack {
+                override fun onSuccess(result: Any) {
+                    Log.d("getbyid", result.toString())
+                    callback(result as Model.Movie)
+                }
 
-    fun getMovieReleasedDate(id : Int) : String {
-        return this.model.moviesData[id].released
-    }
-
-    fun getMoviePlot(id : Int) : String {
-        return this.model.moviesData[id].plot
-    }
-
-    fun getMovieGenres(id : Int) : List<String> {
-        return this.model.moviesData[id].genre.replace(" ", "").split(",")
-    }
-
-    fun getMoviePlayTime(id : Int) : String {
-        return this.model.moviesData[id].playtime
-    }
-
-    fun getMovieDirector(id : Int) : String {
-        return this.model.moviesData[id].director
-    }
-
-    fun getMovieCost(id : Int) : String {
-        return this.model.moviesData[id].cost
-    }
-
-    fun getMovieProfit(id : Int) : String {
-        return this.model.moviesData[id].profit
-    }
-
-    fun getMovieCast(id : Int) : MutableList<Pair<String, String>> {
-        var castInfo : MutableList<Pair<String, String>> = mutableListOf()
-        val actors = this.model.moviesData[id].cast.split(',')
-        for(actor in actors) {
-            val temp = actor.split("#")
-            castInfo.add(Pair(temp[0], temp[1]))
-        }
-        return castInfo
-    }
-
-    fun getPosterName(id : Int) : String  {
-        return this.model.moviesData[id].poster
-    }
-
-    fun getMoviesCount() : Int {
-        return this.model.moviesData.count()
+                override fun onError(error: String)  {
+                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                    callback(null)
+                }
+            },
+        )
     }
 }
