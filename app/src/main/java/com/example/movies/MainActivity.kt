@@ -1,6 +1,7 @@
 package com.example.movies
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -51,23 +52,34 @@ class MainActivity : AppCompatActivity() {
             if(!hasFocus)
                 hideKeyboard(binding.searchBar)
         }
+
+        binding.btnRetry.setOnClickListener {
+            renderRecyclerViewItems(controller, binding)
+            binding.btnRetry.visibility = View.INVISIBLE
+        }
     }
 
 
     //Megjeleníti a szűrt vagy összes elérhető filmet a RecyclerView-ben
     private  fun renderRecyclerViewItems(controller: Controller, binding : ActivityMainBinding) {
         controller.getAllMoviesData() { moviesData ->
-            val adapter = moviesData?.let { MovieAdapter(it) }
-            binding.listOfMovies.adapter = adapter
-            binding.listOfMovies.layoutManager = LinearLayoutManager(applicationContext)
-            adapter?.setOnItemClickListener(object : MovieAdapter.onItemClickListener{
-                override fun onItemClick(view : View, position: Int) {
-                    Toast.makeText(applicationContext, "A kiválaszott film azonosító: ${view.tag}", Toast.LENGTH_SHORT).show()
-                }
-            })
+            if(moviesData == null) {
+                binding.btnRetry.visibility = View.VISIBLE
+            }
+            else {
+                val adapter = MovieAdapter(moviesData)
+                binding.listOfMovies.adapter = adapter
+                binding.listOfMovies.layoutManager = LinearLayoutManager(applicationContext)
+                adapter.setOnItemClickListener(object : MovieAdapter.onItemClickListener{
+                    override fun onItemClick(view : View, position: Int) {
+                        //Toast.makeText(applicationContext, "A kiválaszott film azonosító: ${view.tag}", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(applicationContext, MovieActivity::class.java)
+                        intent.putExtra("movieId", view.tag.toString())
+                        startActivity(intent)
+                    }
+                })
+            }
         }
-
-
     }
 
 
