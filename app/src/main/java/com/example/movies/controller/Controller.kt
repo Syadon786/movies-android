@@ -26,8 +26,24 @@ class Controller(context : Context, packageName : String) {
 
                     override fun onError(error: String)  {
                         Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                        callback(null)
                     }
                 },
             )
+    }
+
+    fun getMovieDataById(id : String, callback: (result: Model.Movie?) -> Unit) {
+        model.fetchMovieById(id,
+            object : VolleyCallBack {
+                override fun onSuccess(result: Any) {
+                    callback(result as Model.Movie)
+                }
+
+                override fun onError(error: String)  {
+                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                    callback(null)
+                }
+            },
+        )
     }
 }
