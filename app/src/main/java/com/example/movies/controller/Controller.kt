@@ -36,6 +36,7 @@ class Controller(context : Context, packageName : String) {
         model.fetchMovieById(id,
             object : VolleyCallBack {
                 override fun onSuccess(result: Any) {
+                    Log.d("getbyid", result.toString())
                     callback(result as Model.Movie)
                 }
 

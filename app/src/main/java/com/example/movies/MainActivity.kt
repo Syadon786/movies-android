@@ -74,6 +74,7 @@ class MainActivity : AppCompatActivity() {
                     override fun onItemClick(view : View, position: Int) {
                         //Toast.makeText(applicationContext, "A kiválaszott film azonosító: ${view.tag}", Toast.LENGTH_SHORT).show()
                         val intent = Intent(applicationContext, MovieActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
                         intent.putExtra("movieId", view.tag.toString())
                         startActivity(intent)
                     }

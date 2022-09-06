@@ -75,8 +75,9 @@ class Model(context : Context) {
 fun fetchMovieById(id : String, callback: VolleyCallBack) {
     val queue = Volley.newRequestQueue(this.context)
     val url = "https://syadon-android-movies.glitch.me/movie/$id"
-    val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
-        {  movieJSON ->
+    val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, url, null,
+        {  result ->
+            val movieJSON = result.getJSONObject(0)
             val tempCast = movieJSON.getJSONArray("cast")
             val cast = mutableListOf<Actor>()
             for(j in 0 until tempCast.length()) {
@@ -108,7 +109,7 @@ fun fetchMovieById(id : String, callback: VolleyCallBack) {
             callback.onError("Could not fetch movie data")
         }
     )
-    RequestQueueSingleton.getInstance(this.context).addToRequestQueue(jsonObjectRequest)
+    RequestQueueSingleton.getInstance(this.context).addToRequestQueue(jsonArrayRequest)
 }
 
 
