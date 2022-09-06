@@ -18,7 +18,7 @@ class Controller(context : Context, packageName : String) {
 
     //Összes film adatait adja vissza listaként melynek minden eleme egy Movie objektum
     fun getAllMoviesData(callback: (result: List<Model.Movie>?) -> Unit)  {
-        model.fetchAllMovie(
+        model.fetchMovieForList(
                 object : VolleyCallBack {
                     override fun onSuccess(result: Any) {
                         callback(result as List<Model.Movie>)
