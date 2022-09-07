@@ -13,7 +13,7 @@ import org.json.JSONObject
 
 class Model(context : Context) {
     private val context : Context
-    val moviesData : MutableList<Movie>
+    private val apiUrl : String = "https://syadon-android-movies.glitch.me"
 
     data class Actor(val actorName : String, val characterName: String)
 
@@ -26,13 +26,12 @@ class Model(context : Context) {
 
     init {
         this.context = context
-        this.moviesData = mutableListOf<Movie>()
     }
 
 
  fun fetchAllMovie(callback: VolleyCallBack)  {
         val queue = Volley.newRequestQueue(this.context)
-        val url = "https://syadon-android-movies.glitch.me/movie/all"
+        val url = "${apiUrl}/movie/all"
         val movies = mutableListOf<Movie>()
         val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, url, null,
             {  response ->
@@ -77,7 +76,7 @@ class Model(context : Context) {
 
 fun fetchMovieForList(callback: VolleyCallBack)  {
     val queue = Volley.newRequestQueue(this.context)
-    val url = "https://syadon-android-movies.glitch.me/movie/list"
+    val url = "${apiUrl}/movie/list"
     val movies = mutableListOf<Movie>()
     val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, url, null,
         {  response ->
@@ -103,7 +102,7 @@ fun fetchMovieForList(callback: VolleyCallBack)  {
 
 fun fetchMovieById(id : String, callback: VolleyCallBack) {
     val queue = Volley.newRequestQueue(this.context)
-    val url = "https://syadon-android-movies.glitch.me/movie/$id"
+    val url = "${apiUrl}/movie/$id"
     val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, url, null,
         {  result ->
             val movieJSON = result.getJSONObject(0)
