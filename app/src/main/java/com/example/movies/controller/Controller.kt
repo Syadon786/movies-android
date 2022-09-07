@@ -3,6 +3,7 @@ package com.example.movies.controller
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import com.example.movies.BuildConfig
 import com.example.movies.api.VolleyCallBack
 import com.example.movies.model.Model
 
@@ -36,8 +37,25 @@ class Controller(context : Context, packageName : String) {
         model.fetchMovieById(id,
             object : VolleyCallBack {
                 override fun onSuccess(result: Any) {
-                    Log.d("getbyid", result.toString())
+                    if(BuildConfig.DEBUG) {
+                        Log.d("getbyid", result.toString())
+                    }
                     callback(result as Model.Movie)
+                }
+
+                override fun onError(error: String)  {
+                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                    callback(null)
+                }
+            },
+        )
+    }
+
+    fun getMovieDataFiltered(filter: String, callback: (result: List<Model.Movie>?) -> Unit) {
+        model.fetchMovieFiltered(filter,
+            object : VolleyCallBack {
+                override fun onSuccess(result: Any) {
+                    callback(result as List<Model.Movie>?)
                 }
 
                 override fun onError(error: String)  {
