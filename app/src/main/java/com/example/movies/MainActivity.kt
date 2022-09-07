@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
                 if(BuildConfig.DEBUG) {
                     Log.d("filter", filter.toString())
                 }
-                //renderRecyclerViewItems(controller, binding, true, filter ?: "")
+                renderRecyclerViewItems(controller, binding, filter)
                 hideKeyboard(binding.searchBar)
                 return true
             }
@@ -41,9 +41,8 @@ class MainActivity : AppCompatActivity() {
             override fun onQueryTextChange(filter: String?): Boolean {
                 //Ha töröljük a szűrés query-t akkor betölti az összes filmet a listába
                 if(filter!!.isEmpty())
-                //    renderRecyclerViewItems(controller, binding)
+                   renderRecyclerViewItems(controller, binding)
                 return true
-                TODO("not implemented")
             }
         })
 
@@ -61,28 +60,50 @@ class MainActivity : AppCompatActivity() {
 
 
     //Megjeleníti a szűrt vagy összes elérhető filmet a RecyclerView-ben
-    private  fun renderRecyclerViewItems(controller: Controller, binding : ActivityMainBinding) {
-        controller.getAllMoviesData() { moviesData ->
-            if(moviesData == null) {
-                binding.btnRetry.visibility = View.VISIBLE
+    private  fun renderRecyclerViewItems(controller: Controller, binding : ActivityMainBinding, filter : String? = null) {
+        if(filter.isNullOrEmpty()) {
+            controller.getAllMoviesData() { moviesData ->
+                if(moviesData == null) {
+                    binding.btnRetry.visibility = View.VISIBLE
+                }
+                else {
+                    val adapter = MovieAdapter(moviesData)
+                    binding.listOfMovies.adapter = adapter
+                    binding.listOfMovies.layoutManager = LinearLayoutManager(applicationContext)
+                    adapter.setOnItemClickListener(object : MovieAdapter.onItemClickListener{
+                        override fun onItemClick(view : View, position: Int) {
+                            //Toast.makeText(applicationContext, "A kiválaszott film azonosító: ${view.tag}", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(applicationContext, MovieActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+                            intent.putExtra("movieId", view.tag.toString())
+                            startActivity(intent)
+                        }
+                    })
+                }
             }
-            else {
-                val adapter = MovieAdapter(moviesData)
-                binding.listOfMovies.adapter = adapter
-                binding.listOfMovies.layoutManager = LinearLayoutManager(applicationContext)
-                adapter.setOnItemClickListener(object : MovieAdapter.onItemClickListener{
-                    override fun onItemClick(view : View, position: Int) {
-                        //Toast.makeText(applicationContext, "A kiválaszott film azonosító: ${view.tag}", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(applicationContext, MovieActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-                        intent.putExtra("movieId", view.tag.toString())
-                        startActivity(intent)
-                    }
-                })
+        }
+        else {
+            controller.getMovieDataFiltered(filter) { moviesData ->
+                if(moviesData == null) {
+                    binding.btnRetry.visibility = View.VISIBLE
+                }
+                else {
+                    val adapter = MovieAdapter(moviesData)
+                    binding.listOfMovies.adapter = adapter
+                    binding.listOfMovies.layoutManager = LinearLayoutManager(applicationContext)
+                    adapter.setOnItemClickListener(object : MovieAdapter.onItemClickListener{
+                        override fun onItemClick(view : View, position: Int) {
+                            //Toast.makeText(applicationContext, "A kiválaszott film azonosító: ${view.tag}", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(applicationContext, MovieActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+                            intent.putExtra("movieId", view.tag.toString())
+                            startActivity(intent)
+                        }
+                    })
+                }
             }
         }
     }
-
 
     //A keyboard eltűntetése sikeres szűrés után
     private fun hideKeyboard(view: View) {

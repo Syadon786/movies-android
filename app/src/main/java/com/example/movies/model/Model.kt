@@ -75,29 +75,8 @@ class Model(context : Context) {
     }
 
 fun fetchMovieForList(callback: VolleyCallBack)  {
-    val queue = Volley.newRequestQueue(this.context)
     val url = "${apiUrl}/movie/list"
-    val movies = mutableListOf<Movie>()
-    val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, url, null,
-        {  response ->
-            val temp : JSONArray = response
-            for(i in 0 until temp.length()) {
-                val movieJSON = temp.getJSONObject(i)
-                movies.add(Movie(id=movieJSON.get("_id").toString(),
-                    title=movieJSON.get("title").toString(),
-                    released=movieJSON.get("released_year").toString(),
-                    plot=movieJSON.get("plot").toString(),
-                    poster=movieJSON.get("poster").toString()
-                ))
-                callback.onSuccess(movies)
-            }
-
-        },
-        {
-            callback.onError("Could not fetch movies data")
-        }
-    )
-    RequestQueueSingleton.getInstance(this.context).addToRequestQueue(jsonArrayRequest)
+    fetchDataForList(url, callback, )
 }
 
 fun fetchMovieById(id : String, callback: VolleyCallBack) {
@@ -141,6 +120,35 @@ fun fetchMovieById(id : String, callback: VolleyCallBack) {
 }
 
 
+fun fetchMovieFiltered(filter : String, callback: VolleyCallBack) {
+    val url = "${apiUrl}/movie/filter/${filter}"
+    fetchDataForList(url, callback)
+}
+
+private fun fetchDataForList(url: String, callback: VolleyCallBack)  {
+    val queue = Volley.newRequestQueue(this.context)
+    val movies = mutableListOf<Movie>()
+    val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, url, null,
+        {  response ->
+            val temp : JSONArray = response
+            for(i in 0 until temp.length()) {
+                val movieJSON = temp.getJSONObject(i)
+                movies.add(Movie(id=movieJSON.get("_id").toString(),
+                    title=movieJSON.get("title").toString(),
+                    released=movieJSON.get("released_year").toString(),
+                    plot=movieJSON.get("plot").toString(),
+                    poster=movieJSON.get("poster").toString()
+                ))
+                callback.onSuccess(movies)
+            }
+
+        },
+        {
+            callback.onError("Could not fetch movies data")
+        }
+    )
+    RequestQueueSingleton.getInstance(this.context).addToRequestQueue(jsonArrayRequest)
+}
 
 /*    //Asset könyvtárból csv fájl kiolvasása sorról sorra
     private fun readCsv() : MutableList<Movie>  {

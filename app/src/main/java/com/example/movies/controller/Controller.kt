@@ -50,4 +50,19 @@ class Controller(context : Context, packageName : String) {
             },
         )
     }
+
+    fun getMovieDataFiltered(filter: String, callback: (result: List<Model.Movie>?) -> Unit) {
+        model.fetchMovieFiltered(filter,
+            object : VolleyCallBack {
+                override fun onSuccess(result: Any) {
+                    callback(result as List<Model.Movie>?)
+                }
+
+                override fun onError(error: String)  {
+                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                    callback(null)
+                }
+            },
+        )
+    }
 }
