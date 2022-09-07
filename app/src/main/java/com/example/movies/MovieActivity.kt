@@ -40,9 +40,14 @@ class MovieActivity : AppCompatActivity() {
                 Picasso.get().load(movieData.poster).into(binding.ivMvPoster)
                 binding.tvMvTitle.text = movieData.title
                 binding.tvMvPlot.text = movieData.plot
-                binding.ivMvPoster.visibility = View.VISIBLE
+                binding.tvMvReleased.text = "${movieData.released} (HU)"
+                binding.tvMvDirector.text = "Director - ${movieData.director}"
+
+                binding.ivMvPosterCard.visibility = View.VISIBLE
                 binding.tvMvTitle.visibility = View.VISIBLE
-                binding.tvMvPlot.visibility = View.VISIBLE
+                binding.tvMvPlotCard.visibility = View.VISIBLE
+                binding.tvMvDirector.visibility = View.VISIBLE
+                binding.tvMvReleased.visibility = View.VISIBLE
             }
         }
     }

@@ -2,43 +2,78 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MovieActivity">
 
-    <ImageView
-        android:id="@+id/iv_mv_poster"
-        android:layout_width="243dp"
-        android:layout_height="228dp"
-        android:layout_marginTop="64dp"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/iv_mv_poster_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/transparent"
+        android:backgroundTint="@color/transparent"
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:cardCornerRadius="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/baljosarnyak" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_mv_title">
+
+        <ImageView
+            android:id="@+id/iv_mv_poster"
+            android:layout_width="214dp"
+            android:layout_height="313dp"
+            app:srcCompat="@drawable/baljosarnyak" />
+    </androidx.cardview.widget.CardView>
+
 
     <TextView
         android:id="@+id/tv_mv_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/iv_mv_poster"
+        app:layout_constraintBottom_toTopOf="@+id/iv_mv_poster_card"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Star Wars I. rész - Baljós árnyak (1999)" />
 
-    <TextView
-        android:id="@+id/tv_mv_plot"
-        android:layout_width="297dp"
-        android:layout_height="211dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/btn_back"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/tv_mv_plot_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="@color/cards"
         android:visibility="invisible"
-        app:layout_constraintTop_toBottomOf="@+id/iv_mv_poster" />
+        app:cardCornerRadius="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_mv_poster_card"
+        app:layout_constraintTop_toBottomOf="@+id/tv_mv_released">
+
+        <TextView
+            android:id="@+id/tv_mv_plot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            android:gravity="left"
+            android:text="TextView"
+            android:textColor="@color/secondary_text"
+            android:textSize="14sp"
+            tools:text="Nyugtalanság uralkodik a Galaktikus Köztársaságban. A távoli csillagrendszerekbe irányuló kereskedelmi utak megadóztatásának tervét heves viták övezik. A kapzsi Kereskedelmi Szövetség felfegyverzett csatahajóival blokád alá veszi a parányi Naboo bolygót. A Főkancellár titokban útnak indít két Jedi lovagot, a béke és az igazság szerzőit, hogy oldják meg a konfliktust és védjék meg Amidala királynőt. Hamarosan azonban kényszerleszállást kell végrehajtaniuk a Tatooine-on, ahol találkoznak az ifjú Anakinnal, akiben túlárad az erő." />
+    </androidx.cardview.widget.CardView>
+
 
     <Button
         android:id="@+id/btn_back"
@@ -62,4 +97,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_mv_director"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/iv_mv_poster_card"
+        app:layout_constraintStart_toStartOf="@+id/iv_mv_poster_card"
+        app:layout_constraintTop_toBottomOf="@+id/iv_mv_poster_card" />
+
+    <TextView
+        android:id="@+id/tv_mv_released"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:text="TextView"
+        android:textColor="@color/secondary_text"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_mv_title" />
 </androidx.constraintlayout.widget.ConstraintLayout>
